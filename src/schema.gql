@@ -12,6 +12,11 @@ type AuthType {
   user: User!
 }
 
+input CreateRoomInput {
+  company: String!
+  name: String!
+}
+
 input CreateUserInput {
   company: String!
   email: String!
@@ -20,16 +25,27 @@ input CreateUserInput {
 }
 
 type Mutation {
+  createRoom(data: CreateRoomInput!): Room!
   createUser(data: CreateUserInput!): User!
+  deleteRoom(id: String!): Boolean!
   deleteUser(id: String!): Boolean!
   login(data: AuthInput!): AuthType!
   updateUser(data: UpdateUserInput!, id: String!): User!
 }
 
 type Query {
+  room(id: String!): Room!
+  roomByName(name: String!): Room!
+  rooms: [Room!]!
   user(id: String!): User!
   userByEmail(email: String!): User!
   users: [User!]!
+}
+
+type Room {
+  company: String!
+  id: ID!
+  name: String!
 }
 
 input UpdateUserInput {
