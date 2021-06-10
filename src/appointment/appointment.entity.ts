@@ -3,17 +3,17 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
-export class Room {
+export class Appointment {
   @PrimaryGeneratedColumn()
   @Field(() => ID)
   id: string;
 
   @Column()
-  name: string;
+  roomId: number;
 
   @Column()
-  company: string;
+  userId: number;
 
   @Column()
-  status: string;
+  time: Date;
 }

@@ -2,6 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Appointment {
+  id: ID!
+  roomId: Float!
+  time: DateTime!
+  userId: Float!
+}
+
 input AuthInput {
   email: String!
   password: String!
@@ -12,9 +19,16 @@ type AuthType {
   user: User!
 }
 
+input CreateAppointmentInput {
+  roomId: Float!
+  time: DateTime!
+  userId: Float!
+}
+
 input CreateRoomInput {
   company: String!
   name: String!
+  status: String!
 }
 
 input CreateUserInput {
@@ -24,9 +38,16 @@ input CreateUserInput {
   password: String!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Mutation {
+  createAppointment(data: CreateAppointmentInput!): Appointment!
   createRoom(data: CreateRoomInput!): Room!
   createUser(data: CreateUserInput!): User!
+  deleteAppointment(id: Float!): Boolean!
   deleteRoom(id: String!): Boolean!
   deleteUser(id: String!): Boolean!
   login(data: AuthInput!): AuthType!
@@ -34,6 +55,11 @@ type Mutation {
 }
 
 type Query {
+  appointment(id: Float!): Appointment!
+  appointmentByDate(time: DateTime!): Appointment!
+  appointments: [Appointment!]!
+  appointmentsByRoomId(id: Float!): [Appointment!]!
+  appointmentsByUserId(id: Float!): [Appointment!]!
   room(id: String!): Room!
   roomByName(name: String!): Room!
   rooms: [Room!]!
@@ -46,6 +72,7 @@ type Room {
   company: String!
   id: ID!
   name: String!
+  status: String!
 }
 
 input UpdateUserInput {

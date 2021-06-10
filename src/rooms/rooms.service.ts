@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
 import { CreateRoomInput } from './dto/create-room.input';
 import { Room } from './rooms.entity';
 
@@ -13,6 +14,7 @@ export class RoomsService {
   constructor(
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
+    private jwtService: JwtService,
   ) {}
 
   async findAllRooms(): Promise<Room[]> {
@@ -37,14 +39,14 @@ export class RoomsService {
   }
 
   async createRoom(data: CreateRoomInput): Promise<Room> {
-    const { name } = data;
+    const { name, company } = data;
     const roomAlreadyExists = await this.roomRepository.findOne({
-      where: { name },
+      where: { name, company },
     });
 
     if (roomAlreadyExists) {
       throw new InternalServerErrorException(
-        `An Room with this name: ${data.name} already exists in your organization. Please use another name.`,
+        `A Room with this name: ${data.name} already exists in your organization. Please use another name.`,
       );
     }
 
@@ -62,6 +64,7 @@ export class RoomsService {
 
   async deleteRoom(id: string): Promise<boolean> {
     const room = await this.findRoomById(id);
+
     const deleted = await this.roomRepository.delete(room);
     if (deleted) {
       return true;

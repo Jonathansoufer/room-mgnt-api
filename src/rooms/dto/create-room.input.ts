@@ -10,4 +10,7 @@ export class CreateRoomInput {
   @IsString()
   @IsNotEmpty({ message: 'This field cannot be empty.' })
   company: string;
+
+  @IsString()
+  status: string;
 }
