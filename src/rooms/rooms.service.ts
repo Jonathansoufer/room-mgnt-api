@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
+// import { JwtService } from '@nestjs/jwt';
 import { CreateRoomInput } from './dto/create-room.input';
 import { Room } from './rooms.entity';
 
@@ -13,8 +13,7 @@ import { Room } from './rooms.entity';
 export class RoomsService {
   constructor(
     @InjectRepository(Room)
-    private roomRepository: Repository<Room>,
-    private jwtService: JwtService,
+    private roomRepository: Repository<Room>, // private jwtService: JwtService,
   ) {}
 
   async findAllRooms(): Promise<Room[]> {
@@ -65,7 +64,7 @@ export class RoomsService {
   async deleteRoom(id: string): Promise<boolean> {
     const room = await this.findRoomById(id);
 
-    const deleted = await this.roomRepository.delete(room);
+    const deleted = await this.roomRepository.delete(room.id);
     if (deleted) {
       return true;
     }

@@ -38,6 +38,7 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
+  @UseGuards(GqlAuthGuard)
   async updateUser(
     @Args('id') id: string,
     @Args('data') data: UpdateUserInput,
@@ -47,6 +48,7 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
+  @UseGuards(GqlAuthGuard)
   async deleteUser(@Args('id') id: string): Promise<boolean> {
     const deleted = await this.userService.deleteUser(id);
     return deleted;

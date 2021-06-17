@@ -62,16 +62,24 @@ export class UserService {
   }
 
   async updateUser(id: string, data: UpdateUserInput): Promise<User> {
-    const user = await this.findUserById(id);
-    await this.userRepository.update(user, { ...data });
-
-    const userUpdated = this.userRepository.create({ ...user, ...data });
-    return userUpdated;
+    const user = await this.userRepository.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    } else {
+      user.name = data.name;
+      user.email = data.email;
+      user.password = data.password;
+      user.company = data.company;
+      const userUpdated = await this.userRepository.save(user);
+      return userUpdated;
+    }
   }
 
   async deleteUser(id: string): Promise<boolean> {
     const user = await this.findUserById(id);
-    const deleted = await this.userRepository.delete(user);
+
+    const deleted = await this.userRepository.delete(user.id);
+
     if (deleted) {
       return true;
     }

@@ -89,7 +89,7 @@ export class AppointmentService {
     const { userId } = appointment;
 
     //TODO: Implement check if user is the owner of the appointment.
-    const deleted = await this.appointmentRepository.delete(appointment);
+    const deleted = await this.appointmentRepository.delete(appointment.id);
     if (deleted) {
       return true;
     }
